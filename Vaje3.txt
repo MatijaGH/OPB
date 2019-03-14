@@ -1,0 +1,91 @@
+ALTER TABLE tabela ALTER stolpci SET NOT NULL;
+
+1. primer:
+ALTER TABLE traktor ALTER lastnik SET NOT NULL;
+ALTER TABLE traktor ALTER znamka SET NOT NULL;
+ALTER TABLE deli ALTER lastnik SET NOT NULL;
+ALTER TABLE deli ALTER znamka SET NOT NULL;
+
+SELECT DISTINCT stolpci
+FROM tabela 1
+(LEFT/RIGHT/FULL)	JOIN tabela 2 ON pogoj
+WHERE pogoj
+GROUP BY stolpci
+HAVING pogoj
+ORDER BY stolpec (ASC/DESC)
+LIMIT stolpci
+
+2. primer:
+SELECT * FROM oseba
+LEFT JOIN traktor ON oseba.id = lastnik
+
+SELECT */ime FROM oseba
+LEFT JOIN traktor ON oseba.id = lastnik
+WHERE traktor.id IS NULL
+
+3. primer:
+SELECT stars.ime, otrok.ime
+FROM oseba AS stars
+JOIN otroci ON stars.id = otroci.stars
+JOIN oseba AS otrok ON otroci.otrok = otrok.id
+
+4. primer:
+SELECT stars.*
+FROM oseba AS stars
+JOIN otroci ON stars.id = otroci.stars
+JOIN oseba AS otrok ON otroci.otrok = otrok.id
+JOIN traktor ON lastnik = otrok.id
+WHERE  nakup < otrok.rojstvo + '10 years'::INTERVAL
+
+5.primer:
+SELECT otrok.ime AS otrok, stari_stars.ime AS stari_stars 
+FROM oseba AS stari_stars 
+JOIN otroci AS o1 ON stari_stars.id = o1.stars
+JOIN otroci AS o2 ON o1.otrok = o2.stars
+RIGHT JOIN oseba AS otrok ON o2.otrok = otrok.id
+
+6. primer:
+SELECT otrok.ime AS otrok, stari_stars.ime AS stari_stars 
+FROM oseba AS otrok 
+LEFT JOIN otroci AS o2 ON o2.otrok = otrok.id
+LEFT JOIN otroci AS o1 ON o1.otrok = o2.stars
+LEFT JOIN oseba AS stari_stars ON stari_stars.id = o1.stars
+
+7. primer:
+SELECT stars, count(*) FROM otroci
+GROUP BY stars
+
+8. primer:
+SELECT ime, count(traktor.id) FROM znamka
+LEFT JOIN traktor ON znamka.id = traktor.znamka
+GROUP BY  ime
+
+9.primer:
+SELECT oseba.id, oseba.ime, coalesce(sum(stevilo),0) AS stevilo_delov
+FROM oseba LEFT JOIN deli ON lastnik = oseba.id
+GROUP BY oseba.id, oseba.ime
+HAVING coalesce(sum(stevilo),0) <= 1
+
+10. primer:
+SELECT oseba.id, ime, sum(now() - nakup) /96 AS izkusnje FROM oseba
+JOIN traktor ON lastnik = oseba.id
+GROUP BY oseba.id, ime
+ORDER BY izkusnje DESC
+LIMIT 1
+
+11.primer:
+SELECT tip, count(DISTINCT id)
+FROM deli JOIN traktor USING (znamka)
+GROUP BY tip
+
+12. primer:
+SELECT extract(DAY FROM o1.rojstvo) || '. ' || extract(MONTH FROM o1.rojstvo) || '.' AS rojstni_dan
+FROM oseba AS o1 JOIN oseba AS o2
+ON extract(DAY FROM o1.rojstvo) = extract(DAY FROM o2.rojstvo)
+AND extract(MONTH FROM o1.rojstvo) = extract(MONTH FROM o2.rojstvo)
+
+SELECT DISTINCT extract(DAY FROM o1.rojstvo) || '. ' || extract(MONTH FROM o1.rojstvo) || '.' AS rojstni_dan
+FROM oseba AS o1 JOIN oseba AS o2
+ON extract(DAY FROM o1.rojstvo) = extract(DAY FROM o2.rojstvo)
+AND extract(MONTH FROM o1.rojstvo) = extract(MONTH FROM o2.rojstvo)
+

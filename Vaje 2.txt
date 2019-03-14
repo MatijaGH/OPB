@@ -1,0 +1,27 @@
+CREATE TABLE tabela (stolpec1 tip1 PRIMARY KEY
+			   	   UNIQUE
+				   NOT NULL
+				   DEFAULT izraz
+				   CHECK (pogoj)
+				   REFERENCES tabela2(stolpec),
+		    stolpec2 tip2  omejitve,
+		    PRIMARY KEY(stolpec1, stolpec2,...)
+		    FOREIGN KEY(stolpec1, stolpec2,...) REFERENCES tabela2 (stolpec1, stolpec2,...)
+
+SELECT stolpci
+FROM tabela
+WHERE pogoj
+ORDER BY stolpec1,stolpec2,... ASC/DESC (narašèajoèe, padajoèe/privzeto je narašèajoèe)
+LIMIT stevilo
+
+(GROUP BY)
+SELECT stolpci, FUN(stolpec)
+FROM tabela
+GROUP BY stolpci
+ORDER BY stolpec1, stolpec2,... ASC/DESC
+LIMIT stevilo
+
+SELECT racun, lastnik, SUM(znesek) as stanje
+FROM transakcija
+JOIN racun ON racun = stevilka
+GROUP BY racun, lastnik

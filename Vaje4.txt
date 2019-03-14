@@ -1,0 +1,122 @@
+CREATE VIEW pogled AS
+SELECT...
+FROM(SELECT...) AS podpoizvedba
+
+1. vaja:
+SELECT lastnik, 10000 * count(*) AS vrednost
+FROM traktor
+GROUP BY lastnik
+
+CREATE VIEW traktor_premozenje AS
+SELECT lastnik, 10000 * count(*) AS vrednost
+FROM traktor
+GROUP BY lastnik
+//rezultate najdemo pod Views, pod definition koda pokaže kako je napisana koda
+
+CREATE VIEW deli_premozenje AS
+SELECT lastnik, 100 * sum(stevilo) AS vrednost
+FROM deli
+GROUP BY lastnik
+
+1.naèin:
+
+SELECT lastnik, deli_premozenje.vrednost,traktor_premozenje.vrednost
+FROM traktor_premozenje FULL JOIN deli_premozenje USING (lastnik)
+
+SELECT lastnik,
+coalesce(deli_premozenje.vrednost,0) + 
+coalesce(traktor_premozenje.vrednost,0) AS premozenje
+FROM traktor_premozenje FULL JOIN deli_premozenje USING (lastnik)
+
+2.naèin:
+
+SELECT * FROM traktor_premozenje
+UNION ALL
+SELECT * FROM deli_premozenje
+
+SELECT lastnik, sum(vrednost) AS premozenje
+FROM (
+ SELECT * FROM traktor_premozenje
+ UNION ALL 
+ SELECT * FROM deli_premozenje
+) AS premozenje
+GROUP BY lastnik
+
+SELECT oseba.id, coalesce(sum(vrednost),0) AS premozenje
+FROM oseba LEFT JOIN(
+ SELECT * FROM traktor_premozenje
+ UNION ALL 
+ SELECT * FROM deli_premozenje
+) AS premozenje ON oseba.id = premozenje.lastnik
+GROUP BY oseba.id
+
+2.vaja:
+
+SELECT * FROM oseba
+WHERE NOT EXISTS(
+ SELECT id FROM traktor
+ JOIN otroci ON lastnik = otrok
+ WHERE barva = 'rdeca' AND stars = oseba.id
+)
+
+3.vaja:
+SELECT lastnik, sum(Stevilo) AS stevilo
+FROM deli
+WHERE znamka NOT IN (
+ SELECT znamka FROM traktor
+ WHERE lastnik = deli.lastnik
+)
+GROUP BY lastnik
+
+4.vaja:
+SELECT lastnik, count(DISTINCT znamka) AS stevilo FROM traktor
+GROUP BY lastnik
+ORDER BY stevilo DESC
+LIMIT 1
+
+WITH razlicne_znamke AS (
+ SELECT lastnik, count(DISTINCT znamka) AS stevilo FROM traktor
+ GROUP BY lastnik
+)
+SELECT oseba.* FROM oseba
+JOIN razlicne_znamke ON oseba.id = lastnik
+WHERE stevilo >= ALL (
+ SELECT stevilo FROM razlicne_znamke
+)
+
+5.vaja:
+SELECT * FROM oseba
+WHERE EXISTS (
+ SELECT otrok FROM otroci
+ WHERE stars = id
+) AND EXISTS (
+ SELECT id FROM znamka
+ WHERE id = ALL (
+  SELECT znamka FROM traktor
+  RIGHT JOIN otroci
+  ON otrok = lastnik AND znamka = znamka.id
+  WHERE stars = oseba.id
+ )
+) 
+
+6.VAJA:
+WITH druzine AS (
+ SELECT id, id AS clan FROM oseba
+ UNION 
+ SELECT otrok AS id, stars AS clan FROM otroci
+)
+SELECT clan, sum(stevilo/dosegljivost::real) AS razpolozljivi //real mora biti, zato da imamo neceloštevilsko deljenje
+FROM druzine
+JOIN deli ON lastnik = id
+JOIN (
+ SELECT id, count(*) AS dosegljivost FROM druzine
+ GROUP BY id
+) AS dosegljivost USING (id)
+GROUP BY clan
+
+7.vaja:
+
+SELECT DISTINCT oseba.* FROM oseba
+JOIN traktor AS t1 ON oseba.id = t1.lastnik
+JOIN traktor AS t2 ON oseba.id = t2.lastnik
+WHERE t1.id <> t2.id
