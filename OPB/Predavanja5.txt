@@ -1,0 +1,21 @@
+mkdir mapa1-naredi datoteko
+ls-kaj je v mapi(ls mapa1/ - kaj je v mapi1)
+pwd-kej sem
+cd mapa1/- pejt v mapo
+cd ..-pejt vn
+ls -l - kdaj si bla narjena
+cd - skoè v delovno mapo
+~ - pomeni delovno podroèje
+nano je editor v linuxu
+mv - premakneš nekaj nekam (mv datoteka.txt da1.txt)-èe prestavlaš v mapo je ne more povoziti, lahko da vanjo
+cp - kopiram nekaj v nekaj
+clear sšisti terminal
+sudo-naredim nekaj kot administrator
+apt-get update - seznani se z novostmi
+apt-get install postgresql postgresql-config
+whoami-kateri uporabnik sem
+exit-logout
+sudo -i -u postgres
+psql - grem še en terminal globlje(terminalèek za bazo)
+\l - pogledaš idle od baze
+\q - grem ven iz idla od baze

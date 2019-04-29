@@ -1,0 +1,14 @@
+bauer fakebook
+bottle - logièni a enostavni webserver
+omogoèa vpostaviti spletni strežnik
+
+#Glavni program
+-priklopimo se na bazo
+-poženemo strežnik na portu 8080
+http://localhost:8080/
+gmal 80:kalsièin spletni strežnik
+nslookup: pove vse o spletni strani
+http: protokol, format spletnih strani 
+
+UPORABLI EDITOR code
+Zaveršnik html

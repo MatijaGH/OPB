@@ -1,0 +1,2 @@
+![ER diagram](slika.png) //kako dodamo sliko na github
+Za risanje diagramov uporabi dia

@@ -1,0 +1,9 @@
+ER diagram
+
+Entiteta---------------Relacija-------------Entiteta
+kljuè,atribut,...	atribut	
+
+--------- ni omejitev
+--------> najveè enkrat
+========= vsaj enkrat
+========> natanko enkrat

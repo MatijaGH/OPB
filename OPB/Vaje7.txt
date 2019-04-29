@@ -1,0 +1,108 @@
+R (A B C D E)
+A...množica atributov relacije
+S <= A, A€A
+funkcijska odvisnost: S->A
+AB -> C
+A -> A (simetriènost)
+S,T <= A: (V B € T S->b) ^ T-> C => S -> C
+S,T € A: S -> A => S v T -> A
+
+nadkljuè relacije R:
+	K <= A:V A € A: K->A
+Nadkljuè K je kljuè, èe V k' < K ni nadkljuè
+
+R je v 3NF: èe za V funkcijsko odvisnost X -> A velja:
+	A € X ali X vsebuje kljuè ali A je del kljuèa
+Boyce-Codd
+R je v BCNF èe za V funkcijsko odvisnost X -> A velja
+	A € X ali X vsebuje kljuè
+
+Primeri:
+R(A B C D E)									kljuèi: ACD, BCD, CDE
+A -> B										R je v 3NF, ni v BCNF
+BC -> E
+DE -> A
+(C in D bosta v vsakem kljuèu, poskušamo dobiti kljuè s tem, da dodamo A)
+ACD -> B => ABCD -> E
+BCD -> E => BCDE -> A
+CDE -> A => ACDE -> B
+
+A  C  D |B  E     ACD -> B			R(A B C D E)  
+________|_____	  ACD -> E		R1((A) B)<_|  |	 |_> R3((A D) E)  zadeva v oklepajih implicira tisto, ki ni
+A1 C1 D1|B1 E1					      |
+A2 C2 D2|B2 E2					      ¡
+						    R2((B C) E)
+
+D datum kontrole				E -> P		vsi kljuèi vsebujejo: DTR -> kandidata DTRS/DTREM
+E emšo tehnika					R -> M
+I ime testa					M -> K
+K kvaliteta letala				EM -> S
+M model letala					S -> EM
+O ocena pri kontroli				DETR -> O
+P plaèa tehnika					T -> I
+R registracija letala			
+S oznaka specializacije				R -> M
+T test						DETR -> M
+						DEMRT -> S
+
+X -> A
+A € X ali X vsebuje kljuè ali A je del kljuèa
+Razbijanje relacije
+	R(DEIKMOPRST)			    kontrola(èe dodamo O je R3 nepotrebna)
+R1((E)P) R2((M)K) R3((DETR)O) R4((T)I)      R5(DEMRSTO)--> R8(EM(S)) R7 + R8 specializacija
+tehnik	 model	  kontrola    test    R6((R)M)<_|   |_>R7((EM)S)
+				      letalo
+
+
+
+
+R(A B C D)
+a) C -> D
+   C -> A
+   B -> C
+
+B kljuè
+Razbitje relacije	R(A B C D)
+		R1((C)D)  R2((C)A) R3((B)C)
+		   R4(A(C)D)
+
+b)
+B -> C
+D -> A
+Kljuè: BD		R(A B C D)
+		R1((B)C)  R2(A(D))  R3((BD))
+
+X-> A
+BCNF A € X ali X vsebuje kljuè
+3NF: A € X ali A je del kljuèa
+
+
+c)
+R(A B C D)
+ABC -> D
+D -> A
+kljuèa: ABC, BCD
+		R((A B C) D)
+		  a1 b1 c1 d1
+		 (a1 b1 c1 d1)
+	R1(A(D))  
+	  a1 d1
+d)
+R(A B C D)
+A -> B
+BC -> D
+A -> C
+kljuè: A
+		R(A B C D)
+	R1((BC)D)  R2((A)BC)
+
+e)
+R(A B C D)
+AB->C
+AB->D
+C->A
+D->B
+kluèa:AB, CD, BC, AD
+3NF da, BCNF ne
+		R((A B) C D)
+	R1((C)A)	R2((D)B)
